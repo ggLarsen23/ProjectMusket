@@ -7,14 +7,14 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private float velocity = 5;
     [SerializeField] private float turnSpeed = 10;
 
-    [SerializeField] private float sprintTimer = 1;
-    [SerializeField] private float sprintMultiplier = 2;
+    [SerializeField] private float sprintWaitTimer = 1;
+    [SerializeField] private float sprintVelocity = 12;
 
     Vector2 input;
     float angle;
     Transform cam;
     private Quaternion targetRotation;
-
+    private float timer;
 
     void Start()
     {
@@ -24,7 +24,7 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawLine(this.transform.position, this.transform.position + new Vector3(5, 0, 0), Color.white, 0.5f);
+        Debug.DrawLine(this.transform.position, this.transform.forward, Color.white, 0.5f);
 
         GetInput();
         if (Mathf.Abs(input.x) < 1 && Mathf.Abs(input.y) < 1) return;
@@ -55,7 +55,14 @@ public class CharacterController : MonoBehaviour
 
     void Move()
     {
+        timer += Time.deltaTime;
+        if(timer > sprintWaitTimer)
+        {
+            velocity = sprintVelocity;
+        }
+        
         transform.position += transform.forward * velocity * Time.deltaTime;
+
     }
 
 
